@@ -19,11 +19,32 @@ app.get('/item', function (req, res) {
 
 // Read By ID -> [GET] /item/:id
 app.get('/item/:id', function (req, res){
+  // Acesso do ID no parâmetro de rota
   const id = req.params.id
 
+  // Acesso item na lista baseado no ID recebido
   const item = lista[id]
 
+  // Envio o item obtido como resposta HTTP
   res.send(item)
 })
+
+  // Sinalizamos que o corpo da requisição está em JSON
+  app.use(express.json())
+
+  // Create -> [POST] /item
+  app.post('/item', function (req, res) {
+    // Extraímos o corpo da requisição
+    const body = req.body
+
+    //
+    const item = body.nome
+
+    // Colocamos o nome dentro da lista de itens
+    lista.push(item)
+
+    // Enviamos uma resposta de sucesso
+    res.send('Item adicionado com sucesso')
+  })
 
 app.listen(3000)
