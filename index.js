@@ -1,33 +1,45 @@
 const express = require('express')
-const app = express()
+const { MongoClient } = require('mongodb')
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
+const dbUrl = 'mongodb+srv://admin:bi2xJkciG6ezywC6@cluster0.kbvzkbz.mongodb.net'
+const dbName = 'OceanJornadaBackendFev2024'
 
-app.get('/oi', function (req, res) {
+async function main() {
+  const client = new MongoClient(dbUrl)
+
+  console.log('Conectando ao banco de dados...')
+  await client.connect()
+  console.log('Banco de dados conectado com sucesso!')
+
+  const app = express()
+
+  app.get('/', function (req, res) {
+    res.send('Hello World')
+  })
+
+  app.get('/oi', function (req, res) {
     res.send('Olá Mundo!')
-})
+  })
 
-// Lista de Personagens
-const lista = ['Rick Sanchez', 'Morty Smith', 'Summer Smith']
+  // Lista de Personagens
+  const lista = ['Rick Sanchez', 'Morty Smith', 'Summer Smith']
 
-// Read All -> [GET] /item
-app.get('/item', function (req, res) {
-  res.send(lista)
-})
+  // Read All -> [GET] /item
+  app.get('/item', function (req, res) {
+    res.send(lista)
+  })
 
-// Read By ID -> [GET] /item/:id
-app.get('/item/:id', function (req, res){
-  // Acesso do ID no parâmetro de rota
-  const id = req.params.id
+  // Read By ID -> [GET] /item/:id
+  app.get('/item/:id', function (req, res) {
+    // Acesso do ID no parâmetro de rota
+    const id = req.params.id
 
-  // Acesso item na lista baseado no ID recebido
-  const item = lista[id]
+    // Acesso item na lista baseado no ID recebido
+    const item = lista[id]
 
-  // Envio o item obtido como resposta HTTP
-  res.send(item)
-})
+    // Envio o item obtido como resposta HTTP
+    res.send(item)
+  })
 
   // Sinalizamos que o corpo da requisição está em JSON
   app.use(express.json())
@@ -37,7 +49,7 @@ app.get('/item/:id', function (req, res){
     // Extraímos o corpo da requisição
     const body = req.body
 
-    //
+    // Pegamos o nome (string) que foi enviado dentro do corpo
     const item = body.nome
 
     // Colocamos o nome dentro da lista de itens
@@ -47,4 +59,8 @@ app.get('/item/:id', function (req, res){
     res.send('Item adicionado com sucesso')
   })
 
-app.listen(3000)
+  app.listen(3000)
+}
+
+
+main()
