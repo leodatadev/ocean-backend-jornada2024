@@ -85,7 +85,7 @@ async function main() {
   })
 
   // Delete -> [DELETE] /item/:id
-  app.delete('/item/:id', async function (req,res){
+  app.delete('/item/:id', async function (req, res){
     // Pegamos o ID da rota
     const id = req.params.id
 
